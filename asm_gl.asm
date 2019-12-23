@@ -1,14 +1,23 @@
+;;;;;;;;;;;;;;;;;
+;;; Variables ;;;
+;;;;;;;;;;;;;;;;;
 section .rodata
 title db "OpenGL Assembly",0
 
 section .bss
 window resq 1
 
+;;;;;;;;;;;;
+;;; Code ;;;
+;;;;;;;;;;;;
 section .text
-global _start
-extern glfwInit, glfwTerminate, glfwCreateWindow, glfwMakeContextCurrent, glfwWindowShouldClose
-extern glClear, glfwSwapBuffers, glfwPollEvents
 
+; external functions
+extern glfwInit, glfwTerminate, glfwCreateWindow, glfwMakeContextCurrent, glfwWindowShouldClose
+extern glClearColor, glClear, glfwSwapBuffers, glfwPollEvents, glewInit, glBegin, glEnd, glFlush
+extern glColor3f, glVertex2f
+
+global _start
 _start:
     ; glfwInit()
     call glfwInit
@@ -26,10 +35,51 @@ _start:
     mov rdi, [window]
     call glfwMakeContextCurrent
 
+    ; glewInit()
+    call glewInit
+
+    ; glClearColor()
+    mov rdi, __float32__(0.0) ; Red
+    mov rsi, __float32__(0.0) ; Green
+    mov rdx, __float32__(0.4) ; Blue
+    mov rcx, __float32__(0.0) ; Alpha
+    call glClearColor
+
 mainLoop:
     ; glClear()
     mov rdi, 0x00004000 ; GL_COLOR_BUFFER_BIT
     call glClear
+
+    ; glBegin()
+    mov rdi, 0x0004 ; GL_TRIANGLES
+    call glBegin
+
+    ; glColor3f()
+    mov rdi, __float32__(1.0)
+    mov rsi, __float32__(0.0)
+    mov rdx, __float32__(0.0)
+    call glColor3f
+
+    ; glVertex2f
+    mov rdi, __float32__(0.0)
+    mov rsi, __float32__(-1.0)
+    call glVertex2f
+
+    ; glVertex2f
+    mov rdi, __float32__(-1.0)
+    mov rsi, __float32__(1.0)
+    call glVertex2f
+
+    ; glVertex2f
+    mov rdi, __float32__(1.0)
+    mov rsi, __float32__(1.0)
+    call glVertex2f
+
+    ; glEnd()
+    call glEnd
+
+    ; glFlush()
+    call glFlush
 
     ; glfwSwapBuffers()
     mov rdi, [window]
