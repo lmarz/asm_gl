@@ -6,6 +6,8 @@ title db "OpenGL Assembly",0
 
 section .bss
 window resq 1
+width resd 1
+height resd 1
 
 ;;;;;;;;;;;;
 ;;; Code ;;;
@@ -14,8 +16,8 @@ section .text
 
 ; external functions
 extern glfwInit, glfwTerminate, glfwCreateWindow, glfwMakeContextCurrent, glfwWindowShouldClose
-extern glClearColor, glClear, glfwSwapBuffers, glfwPollEvents, glewInit, glBegin, glEnd, glFlush
-extern glColor3f, glVertex2f
+extern glClearColor, glClear, glfwSwapBuffers, glfwPollEvents, glBegin, glEnd, glFlush, glViewport
+extern glColor3f, glVertex2f, glfwGetFramebufferSize
 
 global _start
 _start:
@@ -35,9 +37,6 @@ _start:
     mov rdi, [window]
     call glfwMakeContextCurrent
 
-    ; glewInit()
-    call glewInit
-
     ; glClearColor()
     mov rdi, __float32__(0.0) ; Red
     mov rsi, __float32__(0.0) ; Green
@@ -46,6 +45,19 @@ _start:
     call glClearColor
 
 mainLoop:
+    ; glfwGetFramebufferSize()
+    mov rdi, [window]
+    lea rsi, [width]
+    lea rdx, [height]
+    call glfwGetFramebufferSize
+
+    ; glViewport()
+    mov rdi, 0
+    mov rsi, 0
+    mov rdx, [width]
+    mov rcx, [height]
+    call glViewport
+
     ; glClear()
     mov rdi, 0x00004000 ; GL_COLOR_BUFFER_BIT
     call glClear

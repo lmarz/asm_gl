@@ -4,8 +4,7 @@ To be specific: It is written in Linux x86_64 ELF64 assembly with intel formatti
 
 ## Requirements
 `nasm` - The [assembler](https://nasm.us)<br>
-`GLFW` - A [library](https://glfw.org) for creating windows<br>
-`Glew` - Extension wrangler [library](http://glew.sourceforge.net/)
+`GLFW` - A [library](https://glfw.org) for creating windows
 
 ## How to Build
 Just run the following command:
