@@ -37,12 +37,20 @@ _start:
     mov rdi, [window]
     call glfwMakeContextCurrent
 
+    ; define clear color floats
+    mov r12, __float32__(0.0)
+    mov r13, __float32__(0.4)
+
     ; glClearColor()
-    mov rdi, __float32__(0.0) ; Red
-    mov rsi, __float32__(0.0) ; Green
-    mov rdx, __float32__(0.4) ; Blue
-    mov rcx, __float32__(0.0) ; Alpha
+    movq xmm0, r12 ; Red
+    movq xmm1, r12 ; Green
+    movq xmm2, r13 ; Blue
+    movq xmm3, r12 ; Alpha
     call glClearColor
+
+    ; define loop floats
+    mov r13, __float32__(1.0)
+    mov r14, __float32__(-1.0)
 
 mainLoop:
     ; glfwGetFramebufferSize()
@@ -67,31 +75,40 @@ mainLoop:
     call glBegin
 
     ; glColor3f()
-    mov rdi, __float32__(1.0)
-    mov rsi, __float32__(0.0)
-    mov rdx, __float32__(0.0)
+    movq xmm0, r13
+    movq xmm1, r12
+    movq xmm2, r12
     call glColor3f
 
-    ; glVertex2f
-    mov rdi, __float32__(0.0)
-    mov rsi, __float32__(-1.0)
+    ; glVertex2f()
+    movq xmm0, r14
+    movq xmm1, r14
     call glVertex2f
 
-    ; glVertex2f
-    mov rdi, __float32__(-1.0)
-    mov rsi, __float32__(1.0)
+    ; glColor3f()
+    movq xmm0, r12
+    movq xmm1, r13
+    movq xmm2, r12
+    call glColor3f
+
+    ; glVertex2f()
+    movq xmm0, r13
+    movq xmm1, r14
     call glVertex2f
 
-    ; glVertex2f
-    mov rdi, __float32__(1.0)
-    mov rsi, __float32__(1.0)
+    ; glColor3f()
+    movq xmm0, r12
+    movq xmm1, r12
+    movq xmm2, r13
+    call glColor3f
+
+    ; glVertex2f()
+    movq xmm0, r12
+    movq xmm1, r13
     call glVertex2f
 
     ; glEnd()
     call glEnd
-
-    ; glFlush()
-    call glFlush
 
     ; glfwSwapBuffers()
     mov rdi, [window]
